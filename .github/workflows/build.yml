@@ -33,8 +33,6 @@ jobs:
       - name: Clone Qt repo
         run: |
           git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
-          cd qt
-          perl init-repository.pl -f --module-subset=qtbase,qtshadertools,qtmultimedia
 
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
