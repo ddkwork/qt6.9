@@ -34,7 +34,8 @@ jobs:
         run: |
           git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
-          perl init-repository.pl -f --module-subset=qt5compat,qt3d,qtbase,qttools,qtcharts,qtdeclarative,qtimageformats,qtlanguageserver,qtmqtt,qtmultimedia,qtnetworkauth,qtquick3d,qtquicktimeline,qtserialbus,qtserialport,qtshadertools,qtsvg,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
+          perl init-repository.pl -f --module-subset=qtbase,qttools
+#          perl init-repository.pl -f --module-subset=qt5compat,qt3d,qtbase,qttools,qtcharts,qtdeclarative,qtimageformats,qtlanguageserver,qtmqtt,qtmultimedia,qtnetworkauth,qtquick3d,qtquicktimeline,qtserialbus,qtserialport,qtshadertools,qtsvg,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
 #          git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
 
       - name: Set up MSVC
