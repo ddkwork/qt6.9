@@ -21,12 +21,14 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      QT_VERSION: 6.9
+
     steps:
       - uses: actions/checkout@v4
                 - uses: seanmiddleditch/gha-setup-ninja@v5
+
                 - name: Clone Qt repo
-                  env:
-                    QT_VERSION: 6.9
                   run: |
                     git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
                     cd qt
