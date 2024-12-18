@@ -26,18 +26,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Find Qt version
-        shell: python
-        run: |
-          import re
-          import os
+      - name: Set Qt version
+        run: echo "QT_VERSION=5.9" >> $GITHUB_ENV
 
-          with open("action.yml") as f:
-            action_content = f.read()
-          match = re.search(r"VERSION_TAG: v([\d.]+)", action_content)
-          print("Found Qt version:", match[1])
-          with open(os.environ["GITHUB_ENV"], "a") as f:
-            f.write("QT_VERSION=" + match[1])
+
 
       - uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Clone Qt repo
@@ -79,39 +71,3 @@ jobs:
           name: qt-static-${{matrix.os-caption}}
           path: qt-*.zip
 
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v4
-        with:
-          path: release
-          merge-multiple: true
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: release/*
-      - name: Find Qt version
-        shell: python
-        run: |
-          import re
-          import os
-
-          with open("action.yml") as f:
-            action_content = f.read()
-          match = re.search(r"VERSION_TAG: v([\d.]+)", action_content)
-          print("Found Qt version:", match[1])
-          with open(os.environ["GITHUB_ENV"], "a") as f:
-            f.write("QT_VERSION=" + match[1])
-      - name: Shorthand tags
-        run: |
-          git config --global user.email "27856297+dependabot-preview[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git tag -d v$QT_VERSION || true
-          git tag v$QT_VERSION -m v$QT_VERSION
-          git push -f origin v$QT_VERSION
-          git tag -d v${QT_VERSION%.*} || true
-          git tag v${QT_VERSION%.*} -m v${QT_VERSION%.*}
-          git push -f origin v${QT_VERSION%.*}
