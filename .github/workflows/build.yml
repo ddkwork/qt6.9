@@ -32,9 +32,10 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Clone Qt repo
         run: |
-          git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
+#          git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
+          git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
-          perl init-repository.pl -f --module-subset=qtbase,qtshadertools,qtmultimedia
+          perl init-repository.pl -f --module-subset=qt5compat,qt3d,qtbase,qttools,qtcharts,qtdeclarative,qtimageformats,qtlanguageserver,qtmqtt,qtmultimedia,qtnetworkauth,qtquick3d,qtquicktimeline,qtserialbus,qtserialport,qtshadertools,qtsvg,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
 
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
