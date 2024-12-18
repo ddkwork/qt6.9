@@ -29,7 +29,8 @@ jobs:
       - name: Set Qt version
         run: echo "QT_VERSION=5.9" >> $GITHUB_ENV
 
-
+      - name: Display Qt version
+        run: echo "QT_VERSION=${{env.QT_VERSION}}"
 
       - uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Clone Qt repo
