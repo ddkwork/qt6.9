@@ -25,7 +25,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     env:
-        QT_VERSION: v5.9
+        QT_VERSION: 6.9
 
     steps:
       - uses: actions/checkout@v4
