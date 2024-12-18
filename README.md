@@ -1,9 +1,8 @@
 # Install Qt Static Action
 
+![GitHub Release](https://img.shields.io/github/v/release/AllanChain/install-qt-static)
+![GitHub Downloads](https://img.shields.io/github/downloads/AllanChain/install-qt-static/total)
 
-> [!Warning]
->
-> This repo is meant for customized Qt builds. For general purpose builds, see [AllanChain/install-qt-static](https://github.com/AllanChain/install-qt-static)
 
 This action will install and set up a static version of Qt.
 
@@ -12,7 +11,7 @@ This action will install and set up a static version of Qt.
 
 Statically linking Qt can often drastically reduce your binary size, and makes deploying the app easier. However, Qt does not provide official static builds. This repo builds static Qt libraries and provide a GitHub Action to use them. An example usage looks like this:
 ```yaml
-    - uses: AllanChain/install-qt-static-custom@v6.7
+    - uses: AllanChain/install-qt-static@v6.7
     - name: Build app
       run: |
         # Use qt-cmake to automatically use the toolchain
@@ -47,7 +46,7 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4
-    - uses: AllanChain/install-qt-static-custom@v6.7
+    - uses: AllanChain/install-qt-static@v6.7
     - uses: ilammy/msvc-dev-cmd@v1
       if: contains(matrix.os, 'windows')
 
