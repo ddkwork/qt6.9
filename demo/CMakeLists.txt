@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(untitled1)
+project(demo)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
@@ -17,8 +17,8 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(untitled1 main.cpp)
-target_link_libraries(untitled1
+add_executable(demo main.cpp)
+target_link_libraries(demo
         Qt::Core
         Qt::Gui
         Qt::Widgets
