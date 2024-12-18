@@ -57,7 +57,7 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ..\qt\configure.bat -release -static -static-runtime -optimize-size -prefix "..\qt_static" -no-feature-accessibility
+          ..\qt\configure.bat -release -static -static-runtime  -no-pch  -optimize-size -prefix "..\qt_static" -no-feature-accessibility
           cmake --build . --parallel 4
           cmake --install .
 
@@ -66,7 +66,7 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ../qt/configure -static -static-runtime -release -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          ../qt/configure -release -static -static-runtime  -no-pch -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
           cmake --build . --parallel 3
           cmake --install .
 
