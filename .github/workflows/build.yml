@@ -24,11 +24,11 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+        QT_VERSION:5.9
+
     steps:
       - uses: actions/checkout@v4
-        env:
-          QT_VERSION:5.9
-
       - uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Clone Qt repo
         run: |
