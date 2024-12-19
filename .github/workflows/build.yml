@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ..\qt\configure.bat -release -static -static-runtime -optimize-size -platform win32-msvc -prefix "..\qt_static" -no-feature-accessibility
+          ..\qt\configure.bat -release -static -static-runtime -optimize-size -no-icu -platform win32-msvc -prefix "..\qt_static" -no-feature-accessibility
           cmake --build . --parallel 4
           cmake --install .
 
