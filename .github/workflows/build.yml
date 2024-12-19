@@ -45,10 +45,6 @@ jobs:
           mkdir qt_build
           cd qt_build
           ..\qt\configure.bat -release -static -static-runtime -optimize-size -platform win32-msvc  -prefix "..\qt_static" -no-feature-accessibility
-
-#         ..\qt\configure.bat -release -static -static-runtime -no-pch -optimize-size -platform win32-msvc -prefix "..\Qt6_binaries" -no-feature-accessibility -confirm-license
-
-
           cmake --build . --parallel 4
           cmake --install .
 
