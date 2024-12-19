@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 project(demo)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -20,6 +20,5 @@ find_package(Qt6 COMPONENTS
 add_executable(demo main.cpp)
 target_link_libraries(demo
         Qt::Core
-        Qt::Gui
-        Qt::Widgets
+        Qt::Gui        Qt::Widgets
 )
