@@ -31,8 +31,7 @@ jobs:
         run: |
           git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
-          perl init-repository.pl -f
-#          --module-subset=qtbase
+          perl init-repository.pl -f --module-subset=qtbase
 
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -45,7 +44,10 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ..\qt\configure.bat -release -static -static-runtime -optimize-size -no-icu -platform win32-msvc -prefix "..\qt_static" -no-feature-accessibility
+          ..\qt\configure.bat -release -static -static-runtime -optimize-size -dbus-runtime -no-icu -no-glib -prefix "..\qt_static" -no-feature-accessibility
+          #          ..\qt\configure.bat -prefix "..\qt_static" -static -static-runtime -no-openssl -schannel -c++std c++20 -dbus-runtime -no-icu -no-glib -qt-doubleconversion -qt-pcre -qt-zlib -qt-freetype -qt-harfbuzz -qt-libpng -qt-libjpeg -qt-sqlite -qt-tiff -qt-webp -confirm-license -release -nomake examples -nomake tests
+          
+          
           cmake --build . --parallel 4
           cmake --install .
 
