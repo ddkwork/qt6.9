@@ -39,18 +39,16 @@ jobs:
 
       - name: Build Qt (Windows)
         if: contains(matrix.os, 'windows')
-        #        env: https://forum.qt.io/topic/156752/qt6-7-compile-failed-from-source-in-windows11/3
-        #          CL: /MP # Build with multiple processes
-        #        您看到的链接错误是由于缺少库或缺少元器件的库造成的。
-        #似乎与此报告非常相似。确保您的源代码树在稳定分支上包含浏览器引擎的良好副本。
-        #
-        #这种事情也可能是由 source 上的并行构建引起的，其中依赖项没有被完全捕获：它不按顺序构建一些东西并失败。
-        #如果你再次运行 ninja，也许是几次，结果会发生变化吗？
-        #如果运行，结果会发生变化吗？ninja -j 1
+        env:
+          CL: /MP # Build with multiple processes
         run: |
           mkdir qt_build
           cd qt_build
-          ..\qt\configure.bat -release -static -static-runtime -optimize-size -prefix "..\qt_static" -no-feature-accessibility
+          ..\qt\configure.bat -release -static -static-runtime -optimize-size -platform win32-msvc  -prefix "..\qt_static" -no-feature-accessibility
+
+#         ..\qt\configure.bat -release -static -static-runtime -no-pch -optimize-size -platform win32-msvc -prefix "..\Qt6_binaries" -no-feature-accessibility -confirm-license
+
+
           cmake --build . --parallel 4
           cmake --install .
 
