@@ -45,8 +45,8 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ..\qt\configure.bat -release -static -static-runtime -optimize-size -dbus-runtime -no-icu -no-glib -prefix "..\qt_static" -no-feature-accessibility
-          #          ..\qt\configure.bat -prefix "..\qt_static" -static -static-runtime -no-openssl -schannel -c++std c++20 -dbus-runtime -no-icu -no-glib -qt-doubleconversion -qt-pcre -qt-zlib -qt-freetype -qt-harfbuzz -qt-libpng -qt-libjpeg -qt-sqlite -qt-tiff -qt-webp -confirm-license -release -nomake examples -nomake tests
+          ..\qt\configure.bat -release -static -static-runtime -optimize-size -dbus-runtime -no-icu -no-glib -prefix "..\qt_static" -no-feature-accessibility -nomake examples -nomake tests -qt-sqlite
+          #  -no-openssl -schannel -c++std c++20 -dbus-runtime -no-icu -no-glib -qt-doubleconversion -qt-pcre -qt-zlib -qt-freetype -qt-harfbuzz -qt-libpng -qt-libjpeg -qt-sqlite -qt-tiff -qt-webp -confirm-license -release -nomake examples -nomake tests
           
           cmake --build . --parallel 4
           cmake --install .
