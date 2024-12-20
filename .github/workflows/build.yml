@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ..\qt\configure.bat -release -static -static-runtime -no-icu -optimize-size -nomake examples -nomake tests -qt-sqlite  -prefix "..\Qt6_binaries" -no-feature-accessibility -confirm-license
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -no-icu -optimize-size -nomake examples -nomake tests -qt-sqlite  -no-feature-accessibility -confirm-license
           cmake --build . --parallel 4
           cmake --install .
 
