@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     env:
-      QT_VERSION: 6.9
+      QT_VERSION: 5.15.2
 
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
