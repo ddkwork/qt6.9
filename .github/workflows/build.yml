@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     env:
-      QT_VERSION: 5.15.2
+      QT_VERSION: 5.15
 
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
@@ -31,7 +31,7 @@ jobs:
         run: |
           git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
-          perl init-repository.pl
+          perl init-repository
       #          -f --module-subset=qtbase
 
       - name: Set up MSVC
