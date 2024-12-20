@@ -22,23 +22,10 @@ jobs:
     runs-on: ${{matrix.os}}
 
     env:
-      QT_VERSION: 5.15
+      QT_VERSION: 6.9
 
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
-
-      - name: Install dependencies
-        run: |
-          choco install python2 --version=2.7.18
-          choco install llvm
-          choco install cmake
-          # 这里可以添加其他依赖项
-
-      - name: Set up environment
-        run: |
-          # 设置 Python 环境变量
-          setx PATH "%PATH%;C:\Python27"
-
       - name: Clone Qt repo
         run: |
           git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
