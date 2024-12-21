@@ -30,7 +30,7 @@ jobs:
         run: |
           git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
-          perl init-repository.pl -f --module-subset=qt5compat,qt3d,qtbase,qtcharts,qtdeclarative,qtimageformats,qtlanguageserver,qtmqtt,qtmultimedia,qtnetworkauth,qtquick3d,qtquicktimeline,qtserialbus,qtserialport,qtshadertools,qtsvg,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
+          perl init-repository.pl -f --module-subset=qt5compat,qt3d,qtbase,qttools,qtcharts,qtdeclarative,qtimageformats,qtlanguageserver,qtmqtt,qtmultimedia,qtnetworkauth,qtquick3d,qtquicktimeline,qtserialbus,qtserialport,qtshadertools,qtsvg,qtwebchannel,qtwebengine,qtwebsockets,qtwebview
 
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -release -static -optimize-size -prefix "..\qt_static" -no-feature-accessibility
+          ..\qt\configure.bat -release -static -static-runtime -optimize-size -prefix "..\qt_static" -no-feature-accessibility
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
@@ -52,7 +52,7 @@ jobs:
         run: |
           mkdir qt_build
           cd qt_build
-          ../qt/configure -static -release -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          ../qt/configure -static -static-runtime -release -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
           cmake --build . --parallel 3
           cmake --install .
 
