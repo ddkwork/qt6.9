@@ -54,7 +54,7 @@ jobs:
            -DFEATURE_optimize_size=ON                           `
            -DFEATURE_cxx20=ON                                   `
            -DBUILD_WITH_PCH=ON                                  `
-           -DQT_USE_CCACHE=ON                                   `
+#           -DQT_USE_CCACHE=ON                                   `
            -DQT_BUILD_EXAMPLES=ON                               `
            -DQT_INSTALL_EXAMPLES_SOURCES=ON                     `
            -DFEATURE_pkg_config=OFF                             `
