@@ -1,0 +1,339 @@
+Usage:  configure [options] [-- cmake-options]  # 使用：配置 [选项] [-- cmake选项]
+
+This is a convenience script for configuring Qt with CMake.  # 这是一个用于使用CMake配置Qt的便利脚本。
+Options after the double dash are directly passed to CMake.  # 双破折号后的选项将直接传递给CMake。
+You can pass CMake variables as configure arguments:  # 可以将CMake变量作为配置参数传递：
+    configure VAR=value  # 配置 VAR=value
+which is equivalent to  # 这等同于
+    configure -- -DVAR=value  # 配置 -- -DVAR=value
+
+Top-level installation directories:  # 顶级安装目录：
+  -prefix <dir> ...... The deployment directory, as seen on the target device.  # -prefix <dir> ...... 部署目录，如在目标设备上所见。
+                       [/usr/local/Qt-$QT_VERSION; qtbase build directory if  # [/usr/local/Qt-$QT_VERSION; qtbase构建目录如果
+                       -developer-build]  # -developer-build]
+  -no-prefix ......... The deployment directory is set to the qtbase build  # -no-prefix ......... 部署目录设置为qtbase构建目录。
+                       directory. Can be used instead of -developer-build  # 可以代替-developer-build使用
+                       to not have to install, as well as avoid  # 以避免安装，并避免
+                       -developer-build's default of -warnings-are-errors.  # -developer-build的默认警告视为错误。
+  -extprefix <dir> ... The installation directory, as seen on the host machine.  # -extprefix <dir> ... 安装目录，如在主机上所见。
+
+Fine tuning of installation directory layout. Note that all directories  # 安装目录布局的微调。注意所有目录
+except -sysconfdir should be located under -prefix:  # 除了-sysconfdir应位于-prefix下：
+  -bindir <dir> ......... Executables [PREFIX/bin]  # -bindir <dir> ......... 可执行文件 [PREFIX/bin]
+  -headerdir <dir> ...... Header files [PREFIX/include]  # -headerdir <dir> ...... 头文件 [PREFIX/include]
+  -libdir <dir> ......... Libraries [PREFIX/lib]  # -libdir <dir> ......... 库 [PREFIX/lib]
+  -archdatadir <dir> .... Arch-dependent data [PREFIX]  # -archdatadir <dir> .... 架构相关数据 [PREFIX]
+  -plugindir <dir> ...... Plugins [ARCHDATADIR/plugins]  # -plugindir <dir> ...... 插件 [ARCHDATADIR/plugins]
+  -libexecdir <dir> ..... Helper programs [ARCHDATADIR/bin on Windows,  # -libexecdir <dir> ..... 辅助程序 [ARCHDATADIR/bin在Windows上，
+                          ARCHDATADIR/libexec otherwise]  # ARCHDATADIR/libexec否则]
+  -qmldir <dir> ......... QML imports [ARCHDATADIR/qml]  # -qmldir <dir> ......... QML导入 [ARCHDATADIR/qml]
+  -sbomdir <dir> .......  Software Bill of Materials (SBOM)  # -sbomdir <dir> ....... 软件材料清单 (SBOM)
+                          installation directory [ARCHDATADIR/sbom]  # 安装目录 [ARCHDATADIR/sbom]
+  -datadir <dir> ........ Arch-independent data [PREFIX]  # -datadir <dir> ........ 架构无关数据 [PREFIX]
+  -docdir <dir> ......... Documentation [DATADIR/doc]  # -docdir <dir> ......... 文档 [DATADIR/doc]
+  -translationdir <dir> . Translations [DATADIR/translations]  # -translationdir <dir> . 翻译 [DATADIR/translations]
+  -sysconfdir <dir> ..... Settings used by Qt programs [PREFIX/etc/xdg]  # -sysconfdir <dir> ..... Qt程序使用的设置 [PREFIX/etc/xdg]
+  -examplesdir <dir> .... Examples [PREFIX/examples]  # -examplesdir <dir> .... 示例 [PREFIX/examples]
+  -testsdir <dir> ....... Tests [PREFIX/tests]  # -testsdir <dir> ....... 测试 [PREFIX/tests]
+  -hostdatadir <dir> .... Data used by qmake [PREFIX]  # -hostdatadir <dir> .... qmake使用的数据 [PREFIX]
+
+Conventions for the remaining options: When an option's description is  # 其余选项的约定：当一个选项的描述是
+followed by a list of values in brackets, the interpretation is as follows:  # 后面跟着括号内的值列表时，解释如下：
+'yes' represents the bare option; all other values are possible prefixes to  # 'yes'表示裸选项；所有其他值是可能的前缀
+the option, e.g., -no-gui. Alternatively, the value can be assigned, e.g.,  # 选项，例如，-no-gui。或者，可以分配值，例如，
+--gui=yes. Values are listed in the order they are tried if not specified;  # --gui=yes。未指定时，值按尝试顺序列出；
+'auto' is a shorthand for 'yes/no'. Solitary 'yes' and 'no' represent binary  # 'auto'是'yes/no'的简写。孤立的'y'和'n'表示二进制
+options without auto-detection.  # 选项没有自动检测。
+
+Configure meta:  # 配置元数据：
+  -help, -h ............ Display this help screen  # -help, -h ............ 显示此帮助屏幕
+  -redo ................ Re-configure with previously used options. In addition,  # -redo ................ 使用以前使用的选项重新配置。此外，
+                         redo removes CMakeCache.txt file and CMakeFiles/ directory  # redo删除CMakeCache.txt文件和CMakeFiles/目录
+                         and recreates them from scratch.  # 并从头重新创建它们。
+                         Additional options may be passed, but will not be  # 可以传递其他选项，但不会被
+                         saved for later use by -redo.  # 用于-redo的后续使用保存。
+  -feature-<feature> ... Enable <feature>  # -feature-<feature> ... 启用<feature>
+  -no-feature-<feature>  Disable <feature> [none]  # -no-feature-<feature> 禁用<feature> [无]
+  -list-features ....... List available features. Note that some features  # -list-features ....... 列出可用功能。注意某些功能
+                         have dedicated command line options as well.  # 也有专门的命令行选项。
+
+Build options:  # 构建选项：
+  -cmake-generator <name> ... Explicitly specify the build system generator for  # -cmake-generator <name> ... 明确指定构建系统生成器
+                         CMake instead of auto-detecting one.  # CMake而不是自动检测。
+  -cmake-use-default-generator ... Turn off auto-detection of the CMake build  # -cmake-use-default-generator ... 关闭CMake构建的自动检测
+                         system generator.  # 系统生成器。
+  -cmake-file-api ...... Let CMake store build metadata for loading the build  # -cmake-file-api ...... 让CMake存储构建元数据以加载构建
+                         into an IDE. [no; yes if -developer-build]  # 到IDE中。[否；如果是-developer-build则为是]
+  -no-guess-compiler ... Do not guess the compiler from the target mkspec.  # -no-guess-compiler ...  不要从目标mkspec猜测编译器。
+  -release ............. Build Qt with optimizations and without debug  # -release ............. 使用优化并且不带调试的构建Qt
+                         symbols [yes]  # 符号 [是]
+                         Note that -developer-build implies -debug unless  # 注意-developer-build隐含-debug，除非
+                         -release is also explicitly specified  # 也明确指定-release
+  -debug ............... Build Qt without optimizations and with debug symbols  # -debug ............... 无优化地构建Qt并带有调试符号
+                         [no]  # [否]
+  -debug-and-release ... Build two versions of Qt in one build tree [no]  # -debug-and-release ... 在一个构建树中构建两个版本的Qt [否]
+  -optimize-debug ...... Enable debug-friendly optimizations in debug builds  # -optimize-debug ...... 在调试构建中启用调试友好的优化
+                         [auto] (Not supported with MSVC or Clang toolchains)  # [自动]（不支持MSVC或Clang工具链）
+  -optimize-size ....... Optimize release builds for size instead of speed [no]  # -optimize-size ....... 优化发布版本以减小大小而不是速度 [否]
+  -force-debug-info .... Create symbol files for release builds [no]  # -force-debug-info .... 为发布构建创建符号文件 [否]
+  -separate-debug-info . Split off debug information to separate files [no]  # -separate-debug-info . 将调试信息分离到单独的文件 [否]
+  -gdb-index ........... Index the debug info to speed up GDB  # -gdb-index ........... 索引调试信息以加快GDB速度
+                         [no; auto if -developer-build with debug info]  # [否；如果是带调试信息的-developer-build则为自动]
+  -gc-binaries ......... Place each function or data item into its own section  # -gc-binaries ......... 将每个函数或数据项放入自己的部分
+                         and enable linker garbage collection of unused  # 并启用链接器的垃圾收集未使用
+                         sections. [auto for static builds, otherwise no]  # 部分。[静态构建自动，其他不]
+  -force-asserts ....... Enable Q_ASSERT even in release builds [no]  # -force-asserts ....... 甚至在发布构建中也启用Q_ASSERT [否]
+  -developer-build ..... Compile and link Qt for developing Qt itself  # -developer-build ..... 为开发Qt自身编译和链接Qt
+                         (exports for auto-tests, extra checks, implies  # （用于自动测试的导出，额外检查，隐含
+                         -no-prefix, etc.) [no]  # -no-prefix等） [否]
+
+  -shared .............. Build shared Qt libraries [yes] (no for UIKit)  # -shared .............. 构建共享的Qt库 [是]（UIKit为否）
+  -static .............. Build static Qt libraries [no] (yes for UIKit)  # -static .............. 构建静态Qt库 [否]（UIKit为是）
+  -framework ........... Build Qt framework bundles [yes] (Apple only)  # -framework ........... 构建Qt框架包 [是]（仅适用于Apple）
+
+  -platform <target> ... Select mkspec for the qmake companion files  # -platform <target> ... 选择qmake伴侣文件的mkspec
+  -device <name> ....... Select devices/mkspec for the qmake companion files  # -device <name> ....... 选择qmake伴侣文件的设备mkspec
+  -device-option <key=value> ... Add option for the device mkspec  # -device-option <key=value> ... 为设备mkspec添加选项
+
+  -appstore-compliant .. Disable code that is not allowed in platform app stores.  # -appstore-compliant .. 禁用平台应用商店不允许的代码。
+                         This is on by default for platforms which require distribution  # 这在需要通过
+                         through an app store by default, in particular Android,  # 应用商店分发的默认平台上打开，特别是Android，
+                         iOS, tvOS, and watchOS. [auto]  # iOS，tvOS和watchOS。 [自动]
+
+  -sbom ................ Enable generation of Software Bill of Materials (SBOM)  # -sbom ................ 启用生成软件材料清单（SBOM）
+                         documents in SPDX tag:value format  # 文档采用SPDX标签：值格式
+                         [yes; no for developer builds]  # [是；对于开发版本为否]
+  -sbom-json ........... Enable SBOM generation in SPDX JSON format [auto]  # -sbom-json ........... 启用生成SPDX JSON格式的SBOM [自动]
+                         (if Python dependencies are available)  # （如果有Python依赖项）
+  -sbom-json-required .. Fails the build if the Python dependencies for JSON  # -sbom-json-required .. 如果构建需要Python依赖项失败
+                         generation are not found [no]  # JSON生成找不到 [否]
+  -sbom-verify ......... Verify generated SBOM files [auto] (if Python  # -sbom-verify ......... 验证生成的SBOM文件 [自动]（如果Python
+                         dependencies are available)  # 依赖项可用）
+  -sbom-verify-required  Fails the build if the Python dependencies for SBOM  # -sbom-verify-required 如果构建需要Python依赖项失败
+                         verification are not found [no]  # SBOM验证找不到 [否]
+
+
+  -qt-host-path <path> . Specify path to a Qt host build for cross-compiling.  # -qt-host-path <path> . 指定用于交叉编译的Qt主机构建路径。
+  -qtnamespace <name> .. Wrap all Qt library code in 'namespace <name> {...}'.  # -qtnamespace <name> .. 用'namespace <name> {...}'包装所有Qt库代码。
+  -qtinlinenamespace ... Make -qtnamespace an inline namespace  # -qtinlinenamespace ... 使-qtnamespace成为内联命名空间
+  -qtlibinfix <infix> .. Rename all libQt6*.so to libQt6*<infix>.so.  # -qtlibinfix <infix> .. 将所有libQt6*.so重命名为libQt6*<infix>.so。
+
+  -coverage <tool> ..... Instrument with the code coverage tool.  # -coverage <tool> ..... 使用代码覆盖工具进行分析。
+  -gcov ................ Instrument with the GCov code coverage tool [no]  # -gcov ................ 使用GCov代码覆盖工具进行分析 [否]
+
+  -trace [backend] ..... Enable instrumentation with tracepoints.  # -trace [backend] ..... 启用带有跟踪点的分析。
+                         Currently supported backends are 'etw' (Windows),  # 当前支持的后端是'etw'（Windows），
+                         'lttng' (Linux), 'ctf' (Common Trace Format, cross-platform)  # 'lttng'（Linux），'ctf'（通用跟踪格式，跨平台）
+                         or 'yes' for auto-detection. [no]  # 或'yes'进行自动检测。[否]
+
+  -sanitize {address|thread|memory|fuzzer-no-link|undefined}  # -sanitize {address|thread|memory|fuzzer-no-link|undefined}
+                         Instrument with the specified compiler sanitizer.  # 使用指定的编译器清理工具进行分析。
+                         Note that some sanitizers cannot be combined;  # 注意某些清理工具不能组合；
+                         for example, -sanitize address cannot be combined with  # 例如，-sanitize address不能与
+                         -sanitize thread.  # -sanitize thread组合。
+
+  -mips_dsp/-mips_dspr2  Use MIPS DSP/rev2 instructions [auto]  # -mips_dsp/-mips_dspr2 使用MIPS DSP/rev2指令 [自动]
+
+  -qreal <type> ........ typedef qreal to the specified type. [double]  # -qreal <type> ........ 将qreal定义为指定类型。[double]
+                         Note: this affects binary compatibility.  # 注意：这会影响二进制兼容性。
+
+  -R <string> .......... Add an explicit runtime library path to the Qt  # -R <string> .......... 向Qt添加显式运行时库路径
+                         libraries. Supports paths relative to LIBDIR.  # 库。支持相对于LIBDIR的路径。
+  -rpath ............... Link Qt libraries and executables using the library  # -rpath ............... 使用库连接Qt库和可执行文件
+                         install path as a runtime library path. Similar to  # 安装路径作为运行时库路径。类似于
+                         -R LIBDIR. On Apple platforms, disabling this implies  # -R LIBDIR。在Apple平台上，禁用此操作意味着
+                         using absolute install names (based in LIBDIR) for  # 使用绝对安装名（基于LIBDIR）进行
+                         dynamic libraries and frameworks. [auto]  # 动态库和框架。[自动]
+
+  -reduce-exports ...... Reduce amount of exported symbols [auto]  # -reduce-exports ...... 减少导出符号的数量 [自动]
+  -reduce-relocations .. Reduce amount of relocations [auto] (Unix only)  # -reduce-relocations .. 减少重定位的数量 [自动]（仅限Unix）
+
+  -plugin-manifests .... Embed manifests into plugins [no] (Windows only)  # -plugin-manifests .... 将清单嵌入插件 [否]（仅限Windows）
+  -static-runtime ...... With -static, use static runtime [no] (Windows only)  # -static-runtime ...... 使用-static时，使用静态运行时 [否]（仅限Windows）
+
+  -pch ................. Use precompiled headers [auto]  # -pch ................. 使用预编译头 [自动]
+  -ltcg ................ Use Link Time Code Generation [no]  # -ltcg ................ 使用链接时代码生成 [否]
+  -intelcet ............ Use Intel Control-flow Enforcement Technology [auto]  # -intelcet ............ 使用Intel控制流防护技术 [自动]
+  -glibc-fortify-source  Use Glibc function fortification [auto]  # -glibc-fortify-source 使用Glibc函数加固 [自动]
+  -trivial-auto-var-init-pattern  # -trivial-auto-var-init-pattern
+                         Use -ftrivial-auto-var-init=pattern [auto]  # 使用-ftrivial-auto-var-init=pattern [自动]
+  -stack-protector ..... Use -fstack-protector-strong [auto]  # -stack-protector ..... 使用-fstack-protector-strong [自动]
+  -stack-clash-protection  # -stack-clash-protection
+                         Use -fstack-clash-protection [auto]  # 使用-fstack-clash-protection [自动]
+  -libstdcpp-assertions  Use libstdc++ assertions [auto]  # -libstdcpp-assertions 使用libstdc++断言 [自动]
+  -libcpp-hardening .... Use libc++ hardening [auto]  # -libcpp-hardening .... 使用libc++加固 [自动]
+  -relro-now-linker .... Use -z relro -z now when linking [auto]  # -relro-now-linker .... 链接时使用-z relro -z now [自动]
+  -linker [bfd,gold,lld,mold]  # -linker [bfd,gold,lld,mold]
+                         Force use of the GNU ld, GNU gold, LLVM/LLD or mold  # 强制使用GNU ld、GNU gold、LLVM/LLD或mold
+                         linker instead of default one (GCC and clang only)  # 链接器而不是默认的（仅限GCC和clang）
+  -ccache .............. Use the ccache compiler cache [no] (Unix only)  # -ccache .............. 使用ccache编译器缓存 [否]（仅限Unix）
+  -unity-build ......... Enable Unity (Jumbo) build  # -unity-build ......... 启用Unity（巨大）构建
+  -unity-build-batch-size <int>  # -unity-build-batch-size <int>
+                         Maximum number of source files used by the unity build  # Unity构建使用的最大源文件数
+                         to create unity source files [32]  # 创建unity源文件 [32]
+
+  -warnings-are-errors . Treat warnings as errors [no; yes if -developer-build]  # -warnings-are-errors . 将警告视为错误 [否；如果是-developer-build则为是]
+
+  -disable-deprecated-up-to <version>  # -disable-deprecated-up-to <version>
+                         Set the QT_DISABLE_DEPRECATED_UP_TO value to <version>.  # 将QT_DISABLE_DEPRECATED_UP_TO值设置为<version>。
+                         QT_DISABLE_DEPRECATED_UP_TO is used to remove  # QT_DISABLE_DEPRECATED_UP_TO用于移除
+                         deprecated methods from both API and ABI.  # 从API和ABI中弃用的方法。
+                         <version> is a hex value, for example 0x060500 can be  # <version>是十六进制值，例如0x060500可以
+                         used to remove all code deprecated in Qt 6.5.0 or  # 用于移除Qt 6.5.0或
+                         earlier releases.  # 更早版本中的所有弃用代码。
+                         By default <version> is set to 0x040000 and 0x050000 on  # 默认情况下 <version> 设置为0x040000和0x050000
+                         Windows, and non-Windows respectively.  # Windows及非Windows。
+
+Build environment:  # 构建环境：
+  -pkg-config .......... Use pkg-config [auto] (Unix only)  # -pkg-config .......... 使用pkg-config [自动]（仅限Unix）
+
+  -vcpkg ............... Use vcpkg [no]  # -vcpkg ............... 使用vcpkg [否]
+
+  -D <string> .......... Pass additional preprocessor define  # -D <string> .......... 传递额外的预处理器定义
+  -I <string> .......... Pass additional include path  # -I <string> .......... 传递额外的包含路径
+  -L <string> .......... Pass additional library path  # -L <string> .......... 传递额外的库路径
+  -F <string> .......... Pass additional framework path (Apple only)  # -F <string> .......... 传递额外的框架路径（仅适用于Apple）
+
+  -sdk <sdk> ........... Build Qt using Apple provided SDK <sdk>. The argument  # -sdk <sdk> ........... 使用Apple提供的SDK <sdk>构建Qt。参数
+                         should be one of the available SDKs as listed by  # 应为可用SDK之一，如下所示
+                         'xcodebuild -showsdks'.  # 'xcodebuild -showsdks'。
+
+  -android-sdk path .... Set Android SDK root path [$ANDROID_SDK_ROOT]  # -android-sdk path .... 设置Android SDK根路径 [$ANDROID_SDK_ROOT]
+  -android-ndk path .... Set Android NDK root path [$ANDROID_NDK_ROOT]  # -android-ndk path .... 设置Android NDK根路径 [$ANDROID_NDK_ROOT]
+  -android-ndk-platform  Set Android platform  # -android-ndk-platform 设置Android平台
+  -android-abis .......  Only one ABI can be specified, default is: armeabi-v7a  # -android-abis ....... 只能指定一个ABI，默认是：armeabi-v7a
+  -android-javac-target  Set the javac build target version [8]  # -android-javac-target 设置javac构建目标版本 [8]
+  -android-javac-source  Set the javac build source version [8]  # -android-javac-source 设置javac构建源版本 [8]
+  -android-style-assets  Automatically extract style assets from the device at  # -android-style-assets 自动从设备提取样式资产
+                         run time. This option makes the Android style behave  # 在运行时。此选项使Android样式表现正常，
+                         correctly, but also makes the Android platform plugin  # 但也使Android平台插件
+                         incompatible with the LGPL2.1. [yes]  # 与LGPL2.1不兼容。[是]
+
+Component selection:  # 组件选择：
+  -submodules <repo>[,<repo>] ... Build the listed repositories and those they  # -submodules <repo>[,<repo>] ... 构建列出的存储库及其
+                         depend on rather than all checked-out repositories.  # 依赖的存储库，而不是所有签出的存储库。
+                         The list should be separated with commas, e.g.  # 列表应以逗号分隔，例如
+                         -submodules qtsvg,qtnetworkauth  # -submodules qtsvg,qtnetworkauth
+                         [default is to build all checked out repositories]  # [默认是构建所有签出的仓库]
+  -skip <repo>[,<repo>]  Exclude one or more entire repositories from the  # -skip <repo>[,<repo>] 排除一个或多个整个存储库
+                         build. The list should be separated with commas.  # 的构建。列表应以逗号分隔。
+                         e.g. -skip qtimageformats,qtsvg  # 例如 -skip qtimageformats,qtsvg
+  -skip-tests <repo>[,<repo>] ... Skip building tests for one or more  # -skip-tests <repo>[,<repo>] ... 跳过构建一个或多个的测试
+                         repositories. The list should be separated with commas.  # 存储库。列表应以逗号分隔。
+                         e.g. -skip-tests qtimageformats,qtsvg  # 例如 -skip-tests qtimageformats,qtsvg
+  -skip-examples <repo>[,<repo>] ... Skip building examples for one or more  # -skip-examples <repo>[,<repo>] ... 跳过构建一个或多个的示例
+                         repositories. The list should be separated with commas.  # 存储库。列表应以逗号分隔。
+                         e.g. -skip-examples qtimageformats,qtsvg  # 例如 -skip-examples qtimageformats,qtsvg
+  -init-submodules ..... When configure is called from the qt git super module,  # -init-submodules ..... 当从qt git超级模块调用配置时，
+                         it will automatically clone and initialize the  # 它将自动克隆和初始化
+                         repositories specified by the -submodules option.  # 由-submodules选项指定的存储库。
+                         When no -submodules are specified, and no existing  # 当未指定-submodules且没有现有
+                         submodules are cloned, a default set of submodules  # 克隆的子模块时，默认设置一组子模块
+                         will be initialized. To adjust other aspects of the  # 将被初始化。要调整其他方面
+                         cloning process, check the init-repository --help  # 克隆过程，请检查init-repository --help
+                         output for additional options that can be passed  # 输出可以传递的其他选项
+                         to configure.  # 以配置的方式。
+  -make <part> ......... Add <part> to the list of parts to be built.  # -make <part> ......... 将<part>添加到要构建的部分列表。
+                         Specifying this option clears the default list first.  # 指定此选项会先清除默认列表。
+                         (allowed values: libs, tools, examples, tests,  # （允许的值：libs，tools，examples，tests，
+                         benchmarks, manual-tests, minimal-static-tests)  # 基准测试，手动测试，最小静态测试）
+                         [default: libs and examples, also tools if not  # [默认：libs和examples，如果不是
+                         cross-building, also tests if -developer-build]  # 交叉构建，也清除测试如果是-developer-build]
+  -nomake <part> ....... Exclude <part> from the list of parts to be built.  # -nomake <part> ....... 将<part>从要构建的部分列表中排除。
+  -install-examples-sources Installs examples source code into the Qt prefix  # -install-examples-sources 将示例源代码安装到Qt前缀
+                         Only possible when -make examples is also passed  # 仅在-make examples传递时可能
+                         [no]  # [否]
+  -gui ................. Build the Qt GUI module and dependencies [yes]  # -gui ................. 构建Qt GUI模块及其依赖项 [是]
+  -widgets ............. Build the Qt Widgets module and dependencies [yes]  # -widgets ............. 构建Qt Widgets模块及其依赖项 [是]
+  -no-dbus ............. Do not build the Qt D-Bus module  # -no-dbus ............. 不构建Qt D-Bus模块
+                         [default on Android and Windows]  # [Android和Windows上的默认]
+  -dbus-linked ......... Build Qt D-Bus and link to libdbus-1 [auto]  # -dbus-linked ......... 构建Qt D-Bus并链接到libdbus-1 [自动]
+  -dbus-runtime ........ Build Qt D-Bus and dynamically load libdbus-1 [no]  # -dbus-runtime ........ 构建Qt D-Bus并动态加载libdbus-1 [否]
+  -accessibility ....... Enable accessibility support [yes]  # -accessibility ....... 启用辅助功能支持 [是]
+                         Note: Disabling accessibility is not recommended.  # 注意：不建议禁用辅助功能。
+
+Qt comes with bundled copies of some 3rd party libraries. These are used  # Qt捆绑了某些第三方库的副本。默认情况下，使用它们
+by default if auto-detection of the respective system library fails.  # 如果相关系统库的自动检测失败。
+  -force-bundled-libs .. Only use bundled 3rd party libraries [no]  # -force-bundled-libs .. 仅使用捆绑的第三方库 [否]
+  -force-system-libs ... Do not use bundled 3rd party libraries [no]  # -force-system-libs ... 不使用捆绑的第三方库 [否]
+
+Core options:  # 核心选项：
+  -doubleconversion .... Select used double conversion library [system/qt/no]  # -doubleconversion .... 选择使用的双重转换库 [系统/qt/无]
+                         No implies use of sscanf_l and snprintf_l (imprecise).  # 无则意味着使用sscanf_l和snprintf_l（不精确）。
+  -glib ................ Enable Glib support [no; auto on Unix]  # -glib ................ 启用Glib支持 [否；自动在Unix上]
+  -inotify ............. Enable inotify support  # -inotify ............. 启用inotify支持
+  -icu ................. Enable ICU support [auto]  # -icu ................. 启用ICU支持 [自动]
+  -pcre ................ Select used libpcre2 [system/qt/no]  # -pcre ................ 选择使用的libpcre2 [系统/qt/无]
+  -zlib ................ Select used zlib [system/qt]  # -zlib ................ 选择使用的zlib [系统/qt]
+
+  Logging backends:  # 日志后端：
+    -journald .......... Enable journald support [no] (Unix only)  # -journald .......... 启用journald支持 [否]（仅限Unix）
+    -syslog ............ Enable syslog support [no] (Unix only)  # -syslog ............ 启用syslog支持 [否]（仅限Unix）
+    -slog2 ............. Enable slog2 support [auto] (QNX only)  # -slog2 ............. 启用slog2支持 [自动]（仅限QNX）
+
+Network options:  # 网络选项：
+  -ssl ................. Enable either SSL support method [auto]  # -ssl ................. 启用任何SSL支持方法 [自动]
+  -no-openssl .......... Do not use OpenSSL [default on Apple]  # -no-openssl .......... 不使用OpenSSL [Apple上的默认]
+  -openssl-linked ...... Use OpenSSL and link to libssl [no]  # -openssl-linked ...... 使用OpenSSL并链接到libssl [否]
+  -openssl-runtime ..... Use OpenSSL and dynamically load libssl [auto]  # -openssl-runtime ..... 使用OpenSSL并动态加载libssl [自动]
+  -schannel ............ Use Secure Channel [auto] (Windows only)  # -schannel ............ 使用安全通道 [自动]（仅限Windows）
+  -securetransport ..... Use SecureTransport [auto] (Apple only)  # -securetransport ..... 使用SecureTransport [自动]（仅适用于Apple）
+
+  -sctp ................ Enable SCTP support [no]  # -sctp ................ 启用SCTP支持 [否]
+
+  -libproxy ............ Enable use of libproxy [no]  # -libproxy ............ 启用libproxy使用 [否]
+  -system-proxies ...... Use system network proxies by default [yes]  # -system-proxies ...... 默认情况下使用系统网络代理 [是]
+
+Gui, printing, widget options:  # GUI，打印，小部件选项：
+  -cups ................ Enable CUPS support [auto] (Unix only)  # -cups ................ 启用CUPS支持 [自动]（仅限Unix）
+
+  -emojisegmenter ...... Enable complex emoji sequences [yes]  # -emojisegmenter ...... 启用复杂的emoji序列 [是]
+  -fontconfig .......... Enable Fontconfig support [auto] (Unix only)  # -fontconfig .......... 启用Fontconfig支持 [自动]（仅限Unix）
+  -freetype ............ Select used FreeType [system/qt/no]  # -freetype ............ 选择使用的FreeType [系统/qt/无]
+  -harfbuzz ............ Select used HarfBuzz-NG [system/qt/no]  # -harfbuzz ............ 选择使用的Harfbuzz-NG [系统/qt/无]
+                         (Not auto-detected on Apple and Windows)  # （在Apple和Windows上未自动检测）
+
+  -gtk ................. Enable GTK platform theme support [auto]  # -gtk ................. 启用GTK平台主题支持 [自动]
+
+  -no-opengl ........... Disable OpenGL support  # -no-opengl ........... 禁用OpenGL支持
+  -opengl <api> ........ Enable OpenGL support. Supported APIs:  # -opengl <api> ........ 启用OpenGL支持。支持的API：
+                         es2, desktop (default on Unix),  # es2，桌面（Unix的默认）
+                         dynamic (Windows only, default on Windows)  # 动态（仅限Windows，Windows的默认）
+  -opengles3 ........... Enable OpenGL ES 3.x support instead of ES 2.x [auto]  # -opengles3 ........... 启用OpenGL ES 3.x支持而不是ES 2.x [自动]
+  -egl ................. Enable EGL support [auto]  # -egl ................. 启用EGL支持 [自动]
+
+  -qpa <qpa1>[;<qpa2>] . Select supported QPA backend(s) (e.g., xcb, cocoa,  # -qpa <qpa1>[;<qpa2>] . 选择支持的QPA后端（例如，xcb，cocoa，
+                         windows). A list separated by semi-colons.  # windows）。以分号分隔的列表。
+  -default-qpa <name> .. Select the default QPA backend (e.g., xcb, cocoa,  # -default-qpa <name> .. 选择默认的QPA后端（例如，xcb，cocoa，
+                         windows).  # windows）。
+  -xcb-xlib............. Enable Xcb-Xlib support [auto]  # -xcb-xlib............. 启用Xcb-Xlib支持 [自动]
+
+  Platform backends:  # 平台后端：
+    -direct2d .......... Enable Direct2D support [auto] (Windows only)  # -direct2d .......... 启用Direct2D支持 [自动]（仅限Windows）
+    -directfb .......... Enable DirectFB support [no] (Unix only)  # -directfb .......... 启用DirectFB支持 [否]（仅限Unix）
+    -eglfs ............. Enable EGLFS support [auto; no on Android and Windows]  # -eglfs ............. 启用EGLFS支持 [自动；在Android和Windows上不]
+    -gbm ............... Enable backends for GBM [auto] (Linux only)  # -gbm ............... 启用GBM的后端 [自动]（仅限Linux）
+    -kms ............... Enable backends for KMS [auto] (Linux only)  # -kms ............... 启用KMS的后端 [自动]（仅限Linux）
+    -linuxfb ........... Enable Linux Framebuffer support [auto] (Linux only)  # -linuxfb ........... 启用Linux帧缓冲区支持 [自动]（仅限Linux）
+    -xcb ............... Enable X11 support [auto] (Linux only)  # -xcb ............... 启用X11支持 [自动]（仅限Linux）
+
+  Input backends:  # 输入后端：
+    -libudev............ Enable udev support [auto]  # -libudev............ 启用udev支持 [自动]
+    -evdev ............. Enable evdev support [auto]  # -evdev ............. 启用evdev支持 [自动]
+    -libinput .......... Enable libinput support [auto]  # -libinput .......... 启用libinput支持 [自动]
+    -mtdev ............. Enable mtdev support [auto]  # -mtdev ............. 启用mtdev支持 [自动]
+    -tslib ............. Enable tslib support [auto]  # -tslib ............. 启用tslib支持 [自动]
+    -bundled-xcb-xinput  Use bundled XInput2 support [auto]  # -bundled-xcb-xinput 使用捆绑的XInput2支持 [自动]
+    -xkbcommon ......... Enable key mapping support [auto]  # -xkbcommon ......... 启用键映射支持 [自动]
+
+  Image formats:  # 图像格式：
+    -gif ............... Enable reading support for GIF [auto]  # -gif ............... 启用对GIF的读取支持 [自动]
+    -ico ............... Enable support for ICO [yes]  # -ico ............... 启用对ICO的支持 [是]
+    -libpng ............ Select used libpng [system/qt/no]  # -libpng ............ 选择使用的libpng [系统/qt/无]
+    -libjpeg ........... Select used libjpeg [system/qt/no]  # -libjpeg ........... 选择使用的libjpeg [系统/qt/无]
+
+Database options:  # 数据库选项：
+  -sql-<driver> ........ Enable SQL <driver> plugin. Supported drivers:  # -sql-<driver> ........ 启用SQL <driver>插件。支持的驱动程序：
+                         db2 ibase mysql oci odbc psql sqlite mimer  # db2 ibase mysql oci odbc psql sqlite mimer
+                         [all auto]  # [全部自动]
+  -sqlite .............. Select used sqlite [system/qt]  # -sqlite .............. 选择使用的sqlite [系统/qt]

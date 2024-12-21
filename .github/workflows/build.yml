@@ -40,8 +40,6 @@ jobs:
         if: contains(matrix.os, 'windows')
         env:
           CL: /MP # Build with multiple processes
-          #https://github.com/Fsu0413/Fs-scripts/blob/master/Compile/lib/qtCompile/conf.lua
-          #https://github.com/qt/qtbase/blob/dev/cmake/configure-cmake-mapping.md
           # “^” 符号是 Windows 批处理脚本中的换行符,在 PowerShell 中，您可以使用 `（反引号）作为续行符。
         run: |
           mkdir qt_build                                         
@@ -54,10 +52,7 @@ jobs:
            -DFEATURE_optimize_size=ON                           `
            -DFEATURE_cxx20=ON                                   `
            -DBUILD_WITH_PCH=ON                                  `
-           -DQT_BUILD_EXAMPLES=ON                               `
-           -DQT_INSTALL_EXAMPLES_SOURCES=ON                     `
            -DFEATURE_pkg_config=OFF                             `
-           -DQT_BUILD_EXAMPLES=OFF                              `
            -DQT_BUILD_TESTS=OFF                                 `
            -DFEATURE_relocatable=ON                             `
            -DFEATURE_doubleconversion=ON                        `
