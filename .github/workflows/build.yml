@@ -42,6 +42,7 @@ jobs:
           CL: /MP # Build with multiple processes
           #https://github.com/Fsu0413/Fs-scripts/blob/master/Compile/lib/qtCompile/conf.lua
           #https://github.com/qt/qtbase/blob/dev/cmake/configure-cmake-mapping.md
+          # “^” 符号是 Windows 批处理脚本中的换行符,在 PowerShell 中，您可以使用 `（反引号）作为续行符。
         run: |
           mkdir qt_build                                        `
           cd qt_build                                           `
