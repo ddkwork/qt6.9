@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     env:
-      QT_VERSION: 6.9
+      QT_VERSION: dev
 
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
@@ -40,44 +40,12 @@ jobs:
         if: contains(matrix.os, 'windows')
         env:
           CL: /MP # Build with multiple processes
-          # “^” 符号是 Windows 批处理脚本中的换行符,在 PowerShell 中，您可以使用 `（反引号）作为续行符。
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-           ..\qt\configure.bat   -confirm-license -prefix "../qt_static"      `                                      
-           -DCMAKE_BUILD_TYPE=Release                           `
-           -DBUILD_SHARED_LIBS=OFF                              `
-           -DFEATURE_static_runtime=ON                          `
-           -DFEATURE_optimize_size=ON                           `
-           -DFEATURE_cxx20=ON                                   `
-           -DBUILD_WITH_PCH=ON                                  `
-           -DFEATURE_pkg_config=OFF                             `
-           -DQT_BUILD_TESTS=OFF                                 `
-           -DFEATURE_relocatable=ON                             `
-           -DFEATURE_doubleconversion=ON                        `
-           -DFEATURE_system_doubleconversion=OFF                `
-           -DFEATURE_system_zlib=OFF                            `
-           -DFEATURE_system_pcre2=OFF                           `
-           -DFEATURE_icu=OFF                                    `
-           -DFEATURE_opengl_dynamic=ON                          `
-           -DFEATURE_ssl=ON                                     `
-           -DFEATURE_openssl=OFF                                `
-           -DFEATURE_schannel=ON                                `
-           -DFEATURE_sql_sqlite=ON                              `
-           -DFEATURE_sql_=ON                                    `
-           -DFEATURE_sql_odbc=ON                                `
-           -DFEATURE_gif=ON                                     `
-           -DFEATURE_ico=ON                                     `
-           -DFEATURE_png=ON                                     `
-           -DFEATURE_jpeg=ON                                    `
-           -DFEATURE_system_sqlite=OFF                          `
-           -DBUILD_qtgrpc=OFF                                   `
-           -DBUILD_qtwebengine=ON                               `
-           -DFEATURE_force_system_libs=ON                       `
-           -DFEATURE_accessibility=ON        
-          
-           cmake --build . --parallel 4                         
-           cmake --install .                                     
+          ..\qt\configure.bat -release -static -optimize-size -prefix "..\qt_static" -no-feature-accessibility
+          cmake --build . --parallel 4                         
+          cmake --install .                                     
 
       - name: Build Qt (macOS)
         if: contains(matrix.os, 'macos')
