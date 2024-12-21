@@ -41,13 +41,13 @@ jobs:
         env:
           CL: /MP # Build with multiple processes
         run: |
-               mkdir qt_build
-               cd qt_build
+          mkdir qt_build
+          cd qt_build
           #          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -no-icu -optimize-size -nomake examples -nomake tests -qt-sqlite  -no-feature-accessibility -confirm-license
-               ..\qt\configure.bat -release -static -static-runtime -no-pch -optimize-size -platform win32-msvc -no-feature-accessibility -confirm-license -nomake examples
-               
-               cmake --build . --parallel 4
-               cmake --install .
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -no-pch -optimize-size -platform win32-msvc -no-feature-accessibility -confirm-license -nomake examples
+          
+          cmake --build . --parallel 4
+          cmake --install .
 
       - name: Build Qt (macOS)
         if: contains(matrix.os, 'macos')
