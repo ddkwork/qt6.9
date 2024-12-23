@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     env:
-      QT_VERSION: 6.6.3
+      QT_VERSION: dev
 
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
@@ -30,8 +30,8 @@ jobs:
         run: |
           git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
-          perl init-repository --module-subset=all,-qtopcua
-      #          perl init-repository.pl --module-subset=all,-qtopcua
+#          perl init-repository --module-subset=all,-qtopcua
+                perl init-repository.pl --module-subset=all,-qtopcua
 
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -install-examples-sources -no-openssl -no-feature-accessibility
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -install-examples-sources -no-openssl -no-feature-accessibility -submodules qtwebengine
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
