@@ -30,24 +30,17 @@ jobs:
 
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'  # 指定 Python 版本
 
       - name: Install Python dependencies
         run: |
-          pip install html5lib
-          # 安装其他依赖，增加需要的 Python 包
+          pip install html5lib flex bison gperf
 
       - name: Install LLVM and Clang
         run: |
           choco install llvm  
-
-      - name: Install flex, bison, gperf
-        run: |
-          choco install flex
-          choco install bison
-          choco install gperf
 
       - name: Clone Qt repo
         run: |
