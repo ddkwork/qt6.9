@@ -28,7 +28,7 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Clone Qt repo
         run: |
-          git clone https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
+          git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
           cd qt
           perl init-repository.pl --module-subset=all,-qtopcua
 
@@ -39,11 +39,11 @@ jobs:
       - name: Build Qt (Windows)
         if: contains(matrix.os, 'windows')
         env:
-          CL: /MP # Build with multiple processes
+          CL: /MP # Build with multiple processes   todo -DBUILD_qtwebengine=ON
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -install-examples-sources -no-openssl -no-feature-accessibility qtwebengine
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -qtwebengine -install-examples-sources -no-openssl -no-feature-accessibility
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
