@@ -41,7 +41,7 @@ jobs:
 
       - name: Install LLVM and Clang
         run: |
-          choco install llvm --version=12.0.0 # 指定版本，如果需要
+          choco install llvm  # 指定版本，如果需要
           # 添加其他相关配置或工具安装
 
       - name: Install flex, bison, gperf
