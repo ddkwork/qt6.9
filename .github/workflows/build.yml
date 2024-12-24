@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -install-examples-sources -no-openssl -no-feature-accessibility -submodules qtwebengine
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -install-examples-sources -no-openssl -no-feature-accessibility qtwebengine
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
