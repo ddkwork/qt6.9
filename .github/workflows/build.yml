@@ -41,8 +41,7 @@ jobs:
 
       - name: Install LLVM and Clang
         run: |
-          choco install llvm  # 指定版本，如果需要
-          # 添加其他相关配置或工具安装
+          choco install llvm  
 
       - name: Install flex, bison, gperf
         run: |
@@ -67,7 +66,7 @@ jobs:
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -install-examples-sources -examplesdir "..\qt_static\examples" -no-openssl -- -DBUILD_qtwebengine=ON
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -opensource  -make examples -opengl  -no-pch -linker lld -install-examples-sources -examplesdir "..\qt_static\examples" -no-openssl -- -DBUILD_qtwebengine=ON
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
