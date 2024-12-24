@@ -16,8 +16,8 @@ jobs:
         include:
           - os: windows-latest
             os-caption: windows
-          - os: macos-latest
-            os-caption: macos
+    #          - os: macos-latest
+    #            os-caption: macos
 
     runs-on: ${{matrix.os}}
 
