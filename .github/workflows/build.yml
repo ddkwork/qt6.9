@@ -47,14 +47,14 @@ jobs:
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
-      - name: Build Qt (macOS)
-        if: contains(matrix.os, 'macos')
-        run: |
-          mkdir qt_build
-          cd qt_build
-          ../qt/configure -static -static-runtime -release -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
-          cmake --build . --parallel 3
-          cmake --install .
+      #      - name: Build Qt (macOS)
+      #        if: contains(matrix.os, 'macos')
+      #        run: |
+      #          mkdir qt_build
+      #          cd qt_build
+      #          ../qt/configure -static -static-runtime -release -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+      #          cmake --build . --parallel 3
+      #          cmake --install .
 
       - name: Package binaries
         run: |
