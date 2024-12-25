@@ -28,19 +28,6 @@ jobs:
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'  # 指定 Python 版本
-
-      - name: Install Python dependencies
-        run: |
-          pip install html5lib flex bison gperf
-
-      - name: Install LLVM and Clang
-        run: |
-          choco install llvm  
-
       - name: Clone Qt repo
         run: |
           git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
