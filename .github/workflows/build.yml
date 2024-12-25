@@ -28,7 +28,6 @@ jobs:
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
 
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -55,11 +54,11 @@ jobs:
       - name: Build Qt (Windows)
         if: contains(matrix.os, 'windows')
         env:
-          CL: /MP # Build with multiple processes   todo -DBUILD_qtwebengine=ON
+          CL: /MP # Build with multiple processes
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -opensource  -make examples -opengl  -no-pch -install-examples-sources -examplesdir "..\qt_static\examples" -no-openssl -no-feature-accessibility -- -DBUILD_qtwebengine=ON
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -opensource -make examples  -no-pch -install-examples-sources -examplesdir "..\qt_static\examples" -no-openssl -no-feature-accessibility -- -DBUILD_qtwebengine=OFF
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
@@ -74,7 +73,12 @@ jobs:
 
       - name: Package binaries
         run: |
-          7z a qt-${{env.QT_VERSION}}-static-${{matrix.os-caption}}.zip qt_static
+          # 安装 zstd 和 tar
+          choco install zstd
+          choco install gnuwin32-tar 
+
+          # 使用 tar 打包并压缩为 .tar.zst
+          tar -cf - qt_static | zstd -o qt-${{env.QT_VERSION}}-static-${{matrix.os-caption}}.tar.zst
 
       - uses: actions/upload-artifact@v4
         with:
