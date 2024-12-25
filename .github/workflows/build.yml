@@ -58,7 +58,7 @@ jobs:
         run: |
           mkdir qt_build                                         
           cd qt_build                                           
-          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -opensource -make examples  -no-pch -install-examples-sources -examplesdir "..\qt_static\examples" -no-dbus -no-openssl -no-feature-accessibility -- -DBUILD_qtwebengine=OFF
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -opensource  -no-pch -install-examples-sources -examplesdir "..\qt_static\examples" -no-dbus -no-openssl -no-feature-accessibility -- -DBUILD_qtwebengine=OFF
           cmake --build . --parallel 4                         
           cmake --install .                                     
 
