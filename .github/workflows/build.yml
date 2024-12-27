@@ -103,7 +103,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git tag -d v$QT_VERSION || true
           git tag v$QT_VERSION -m v$QT_VERSION
-          git push -f origin v$QT_VERSION
+          git push -f origin v$QT_VERSION --force
           git tag -d v${QT_VERSION%.*} || true
           git tag v${QT_VERSION%.*} -m v${QT_VERSION%.*}
-          git push -f origin v${QT_VERSION%.*}
+          git push -f origin v${QT_VERSION%.*} --force
