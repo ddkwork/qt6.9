@@ -28,6 +28,60 @@ jobs:
     steps:
       - uses: seanmiddleditch/gha-setup-ninja@v5
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # 指定 Python 版本
+
+      - name: Install Python dependencies
+        run: |
+          pip install html5lib flex bison gperf
+
+      - name: Install LLVM and Clang
+        run: |
+          choco install llvm  
+
+      - name: Clone Qt repo
+        run: |
+          git clone --recursive https://code.qt.io/qt/qt5.git qt -b '${{env.QT_VERSION}}'
+          cd qt
+          perl init-repository.pl -f --module-subset=all,-qtopcua
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        if: contains(matrix.os, 'windows')
+
+      - name: Build Qt (Windows)
+        if: contains(matrix.os, 'windows')
+        env:
+          CL: /MP # Build with multiple processes
+        run: |
+          mkdir qt_build                                         
+          cd qt_build                                           
+          ..\qt\configure.bat -prefix "..\qt_static" -release -static -static-runtime -optimize-size -opensource -no-openssl -no-feature-accessibility
+          cmake --build . --parallel 4                         
+          cmake --install .                                     
+
+      - name: Build Qt (macOS)
+        if: contains(matrix.os, 'macos')
+        run: |
+          mkdir qt_build
+          cd qt_build
+          ../qt/configure -static -static-runtime -release -optimize-size -prefix "../qt_static" -no-feature-accessibility -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          cmake --build . --parallel 3
+          cmake --install .
+
+      - name: Package binaries
+        run: |
+          choco install zstd
+          choco install gnuwin32-tar 
+          tar -cf - qt_static | zstd -o qt-${{env.QT_VERSION}}-static-${{matrix.os-caption}}.tar.zst
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qt-static-${{matrix.os-caption}}
+          path: qt-*.tar.zst
+
   release:
     runs-on: ubuntu-latest
     needs: build
